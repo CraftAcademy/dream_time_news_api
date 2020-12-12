@@ -1,5 +1,7 @@
 RSpec.describe "GET /api/articles", type: :request do
-  let!(:articles){5.times{create(:article)}}
+  let(:journalist) { create(:user, role: "journalist") }
+  let(:journalist_headers) { journalist.create_new_auth_token }
+  let!(:articles){5.times{create(:article, author_id: journalist.id)}}
 
   describe "GET /api/articles" do
     before do
