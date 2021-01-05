@@ -11,6 +11,11 @@ class Api::ArticlesController < ApplicationController
     end
   end
 
+  def index
+    articles = Article.all
+    render json: articles, each_serializer: ArticlesIndexSerializer
+  end
+
   private
 
   def article_params
