@@ -19,7 +19,7 @@ class Api::ArticlesController < ApplicationController
 
   def show
     article = Article.find(params[:id])
-    render json: { article: article }, status: 200
+    render json: article, serializer: ArticlesShowSerializer
   end
 
   private
