@@ -14,9 +14,21 @@ RSpec.describe "GET /api/articles", type: :request do
 
     it "is expected to return a collection of articles" do
       expect(response_json["articles"].count).to eq 5
+    end
+
+    it "is expected that every article has an author" do 
       expect(response_json["articles"][0]["author"]).to eq journalist.email
+    end
+
+    it "is expected to return a article with an title" do
       expect(response_json["articles"][0]["title"]).to eq "MyString"
+    end
+
+    it "is expected to return a article with an subtitle" do
       expect(response_json["articles"][0]["sub_title"]).to eq "MyText"
+    end
+
+    it "is expected to return a article with content" do
       expect(response_json["articles"][0]["content"]).to eq "MyText"
     end
   end
