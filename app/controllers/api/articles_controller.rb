@@ -1,6 +1,6 @@
 class Api::ArticlesController < ApplicationController
-  before_action :authenticate_user!, only: [:create]
-  before_action :is_user_journalist?, only: [:create]
+  before_action :authenticate_user!, only: %i[create]
+  before_action :is_user_journalist?, only: %i[create]
 
   def create
     article = current_user.articles.create(article_params)
@@ -20,6 +20,8 @@ class Api::ArticlesController < ApplicationController
   def show
     article = Article.find(params[:id])
     render json: article, serializer: ArticlesShowSerializer
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { message: 'No article found' }, status: 404
   end
 
   private
