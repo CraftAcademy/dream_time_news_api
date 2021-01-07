@@ -1,4 +1,4 @@
-class ArticlesIndexSerializer < ActiveModel::Serializer
+class ArticlesShowSerializer < ActiveModel::Serializer
   attributes :id, :title, :sub_title, :content, :created_at, :updated_at, :author
 
   def created_at
