@@ -8,13 +8,13 @@ Stripe.plan :DreamTimePlan do |plan|
   plan.name = 'DreamTime Subscription'
 
   # amount in cents. This is 6.99
-  plan.amount = 75
+  plan.amount = 110000
 
   # currency to use for the plan (default 'usd')
   plan.currency = 'sek'
 
   # interval must be either 'day', 'week', 'month' or 'year'
-  plan.interval = 'month'
+  plan.interval = 'year'
 
   # only bill once every three months (default 1)
   plan.interval_count = 1
