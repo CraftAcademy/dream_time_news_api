@@ -8,6 +8,18 @@ RSpec.describe 'POST /api/subscriptions', type: :request do
   before(:each) { StripeMock.start }
   after(:each) { StripeMock.stop}
 
+  let(:product) { stripe_helper.create_product}
+  let!(:plan) do
+    stripe_helper.create_plan(
+      id: 'DreamTimePlan',
+      amount: 50,
+      currency: 'usd',
+      interval: 'month',
+      interval_count: 1,
+      name: 'DreamTimePlan',
+      product: product.id
+    )
+  end
 
   describe 'successfully' do
     before do
@@ -23,7 +35,7 @@ RSpec.describe 'POST /api/subscriptions', type: :request do
     end
 
     it 'is expected to return a success message' do
-      expect (response_json['message']).to eq 'You are now a subscriber'
+      expect(response_json['message']).to eq 'You are now a subscriber'
     end
 
     it 'is expected to make user a subscriber' do
