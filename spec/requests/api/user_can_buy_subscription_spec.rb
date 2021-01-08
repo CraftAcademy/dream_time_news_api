@@ -39,7 +39,32 @@ RSpec.describe 'POST /api/subscriptions', type: :request do
     end
 
     it 'is expected to make user a subscriber' do
-      expect(user.reload.subscriber?).to eq true
+      expect(user.reload.role).to eq 'subscriber'
+    end
+  end
+
+  describe 'unsuccessfully' do
+    describe 'when card is declined' do
+      before do
+        StripeMock.prepare_card_error(:card_declined, :new_invoice)
+        post '/api/subscriptions',
+      params: {
+        stripeToken: valid_stripe_token
+      },
+      headers: user_headers
+      end
+      
+      it 'is expected to return 422 response status' do
+        expect(response).to have_http_status 422
+      end
+  
+      it 'is expected to return a error message' do
+        expect(response_json['message']).to eq 'Transaction was not successfull. The card was declined'
+      end
+  
+      it 'is not expected to make user a subscriber' do
+        expect(user.reload.role).to eq 'registered_user'
+      end
     end
   end
 end

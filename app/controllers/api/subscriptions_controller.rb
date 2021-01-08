@@ -16,7 +16,7 @@ class Api::SubscriptionsController < ApplicationController
     end
    
   rescue => error
-    binding.pry
+    render_stripe_error(error.message)
   end
 
 private
@@ -27,14 +27,14 @@ private
     customer.id
   end
 
-def test_env?(customer, subscription)
-  if Rails.env.test?
-    invoice = Stripe::Invoice.create({ customer: customer, subscription: subscription.id, paid: true})
-    subscription.latest_invoice = invoice.id
+  def test_env?(customer, subscription)
+    if Rails.env.test?
+      invoice = Stripe::Invoice.create({ customer: customer, subscription: subscription.id, paid: true})
+      subscription.latest_invoice = invoice.id
+    end
   end
-end
 
   def render_stripe_error(error)
-    render json: { message: "Transaction was not successfull. #{error} "}, status: 422
+    render json: { message: "Transaction was not successfull. #{error}"}, status: 422
   end
 end
