@@ -17,7 +17,7 @@ module DecodeService
       uri[:type] = Regexp.last_match(1)
       uri[:encoder] = Regexp.last_match(2)
       uri[:data] = Regexp.last_match(3)
-      uri[:extension] = Regexp.last_match(1).spilt('/')[1]
+      uri[:extension] = Regexp.last_match(1).split('/')[1]
       uri
     end
   end
