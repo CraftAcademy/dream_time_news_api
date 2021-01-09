@@ -11,7 +11,7 @@ module DecodeService
 
   private
 
-  def split_base64(string)
+  def self.split_base64(string)
     if string =~ /^data:(.*?);(.*?),(.*)$/
       uri = {}
       uri[:type] = Regexp.last_match(1)
