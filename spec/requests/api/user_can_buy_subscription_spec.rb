@@ -59,7 +59,7 @@ RSpec.describe 'POST /api/subscriptions', type: :request do
       end
   
       it 'is expected to return a error message' do
-        expect(response_json['message']).to eq 'Transaction was not successful. The card was declined'
+        expect(response_json['message']).to eq 'Something went wrong. The card was declined'
       end
   
       it 'is not expected to make user a subscriber' do

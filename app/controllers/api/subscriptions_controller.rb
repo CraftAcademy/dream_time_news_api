@@ -35,6 +35,6 @@ private
   end
 
   def render_stripe_error(error)
-    render json: { message: "Transaction was not successful. #{error}"}, status: 422
+    render json: { message: "Something went wrong. #{error}"}, status: 422
   end
 end
