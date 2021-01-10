@@ -1,5 +1,5 @@
 class ArticlesShowSerializer < ActiveModel::Serializer
-  attributes :id, :title, :sub_title, :content, :created_at, :updated_at, :author
+  attributes :id, :title, :sub_title, :content, :image, :created_at, :updated_at, :author
 
   def created_at
     object.created_at.strftime('%F')
@@ -11,5 +11,10 @@ class ArticlesShowSerializer < ActiveModel::Serializer
 
   def author
     object.author.email
+  end
+
+  def image
+    return nil unless object.image.attached?
+    object.image_path
   end
 end
