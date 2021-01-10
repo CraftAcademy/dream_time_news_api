@@ -1,8 +1,16 @@
 RSpec.describe "POST /api/articles", type: :request do
-  let(:registered_user) { create(:user, role: "registered_user") }
-  let(:registered_user_headers) { registered_user.create_new_auth_token }
   let(:journalist) { create(:user, role: "journalist") }
   let(:journalist_headers) { journalist.create_new_auth_token }
+
+  let(:image) do
+    {
+      type: 'application/png',
+      encoder: 'name=test_image.png:base64',
+      data: 'KJA84y43qkufsk844oshkg884hskgh',
+      extension: 'png'
+    }
+  end
+
   describe "Journalist can create an article" do
     before do
       post "/api/articles",
@@ -12,6 +20,7 @@ RSpec.describe "POST /api/articles", type: :request do
             sub_title: "Test subtitle",
             author_id: journalist.id,
             content: "Test content!",
+            image: image
           },
         },
         headers: journalist_headers
@@ -24,6 +33,8 @@ RSpec.describe "POST /api/articles", type: :request do
     end
   end
   describe "Registered user can not create an article" do
+    let(:registered_user) { create(:user, role: "registered_user") }
+    let(:registered_user_headers) { registered_user.create_new_auth_token }
     before do
       post "/api/articles",
         params: {
@@ -43,6 +54,7 @@ RSpec.describe "POST /api/articles", type: :request do
       expect(response_json).to have_key("message").and have_value("You are not authorized to create an article.")
     end
   end
+
   describe "Visitor can not create an article" do
     before do
       post "/api/articles",
