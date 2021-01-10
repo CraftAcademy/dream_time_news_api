@@ -12,4 +12,9 @@ class ArticlesShowSerializer < ActiveModel::Serializer
   def author
     object.author.email
   end
+
+  def image
+    return nil unless object.image.attached?
+    object.image_path
+  end
 end
