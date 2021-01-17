@@ -1,5 +1,5 @@
 class AddPremiumToArticles < ActiveRecord::Migration[6.0]
   def change
-    add_column :articles, :premium, :boolean default: false
+    add_column :articles, :premium, :boolean, default: false
   end
 end
