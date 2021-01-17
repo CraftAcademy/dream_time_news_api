@@ -7,4 +7,3 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 User.create(email: 'journalist@mail.com', password: 'password', role: 'journalist')
-5.times {Article.create(title: 'Covid', sub_title: 'Covid 19', content: 'Covid coming', author_id: 1)}

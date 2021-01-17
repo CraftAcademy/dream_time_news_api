@@ -16,7 +16,7 @@ RSpec.describe 'GET/api/articles', type: :request do
     it 'is expected to return content of the article' do
       expect(response_json['article']['content']).to eq 'MyText'
     end
-    it 'is expected to return content of the article' do
+    it 'is expected to return author of the article' do
       expect(response_json['article']['author']).to eq 'user@example.com'
     end
   end
