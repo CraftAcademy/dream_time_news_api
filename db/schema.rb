@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2021_01_16_213242) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "author_id", null: false
-    t.boolean "premium", default: true
+    t.boolean "premium", default: false
   end
 
   create_table "users", force: :cascade do |t|
