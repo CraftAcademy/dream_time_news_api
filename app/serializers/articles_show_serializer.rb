@@ -1,5 +1,5 @@
 class ArticlesShowSerializer < ActiveModel::Serializer
-  attributes :id, :title, :sub_title, :content, :image, :created_at, :updated_at, :author
+  attributes :id, :title, :sub_title, :content, :image, :created_at, :updated_at, :author, :premium
 
   def created_at
     object.created_at.strftime('%F')

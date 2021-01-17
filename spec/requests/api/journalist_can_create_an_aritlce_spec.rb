@@ -1,5 +1,5 @@
-RSpec.describe "POST /api/articles", type: :request do
-  let(:journalist) { create(:user, role: "journalist") }
+RSpec.describe 'POST /api/articles', type: :request do
+  let(:journalist) { create(:user, role: 'journalist') }
   let(:journalist_headers) { journalist.create_new_auth_token }
 
   let(:image) do
@@ -11,67 +11,117 @@ RSpec.describe "POST /api/articles", type: :request do
     }
   end
 
-  describe "Journalist can create an article" do
+  describe 'Journalist can create an article' do
     before do
-      post "/api/articles",
-        params: {
-          article: {
-            title: "Test title",
-            sub_title: "Test subtitle",
-            author_id: journalist.id,
-            content: "Test content!",
-            image: image
-          },
-        },
-        headers: journalist_headers
+      post '/api/articles',
+           params: {
+             article: {
+               title: 'Test title',
+               sub_title: 'Test subtitle',
+               author_id: journalist.id,
+               content: 'Test content!',
+               image: image
+             }
+           },
+           headers: journalist_headers
     end
-    it "is expected to return 201 status" do
+
+    it 'is expected to return 201 status' do
       expect(response).to have_http_status 201
     end
-    it "is expected to return a success message" do
-      expect(response_json).to have_key("message").and have_value("Your article was successfully created!")
+
+    it 'is expected to return a success message' do
+      expect(response_json).to have_key('message').and have_value('Your article was successfully created!')
     end
-  end
-  describe "Registered user can not create an article" do
-    let(:registered_user) { create(:user, role: "registered_user") }
-    let(:registered_user_headers) { registered_user.create_new_auth_token }
-    before do
-      post "/api/articles",
-        params: {
-          article: {
-            title: "Test title",
-            sub_title: "Test subtitle",
-            author_id: registered_user.id,
-            content: "Test content!",
-          },
-        },
-        headers: registered_user_headers
-    end
-    it "is expected to return 401 status" do
-      expect(response).to have_http_status 401
-    end
-    it "is expected to return an error message" do
-      expect(response_json).to have_key("message").and have_value("You are not authorized to create an article.")
+    
+    it 'is expected to return created article with no premium' do
+      article = journalist.articles.first
+      expect(article.title).to eq 'Test title'
+      expect(article.sub_title).to eq 'Test subtitle'
+      expect(article.content).to eq 'Test content!'
+      expect(article.premium).to be false
     end
   end
 
-  describe "Visitor can not create an article" do
+  describe 'Journalist can create premium articles for subscribers' do
     before do
-      post "/api/articles",
-        params: {
-          article: {
-            title: "Test title",
-            sub_title: "Test subtitle",
-            author_id: "Test author",
-            content: "Test content!",
-          },
-        }
+      post '/api/articles',
+           params: {
+             article: {
+               title: 'Test title',
+               sub_title: 'Test subtitle',
+               author_id: journalist.id,
+               content: 'Test content!',
+               image: image,
+               premium: true
+             }
+           },
+           headers: journalist_headers
     end
-    it "is expected to return 401 status" do
+
+    it 'is expected to return 201 status' do
+      expect(response).to have_http_status 201
+    end
+
+    it 'is expected to return with a successful message' do
+      expect(response_json).to have_key('message').and have_value(
+                                'Your article was successfully created!'
+                              )
+    end
+
+    it 'is expected to return created article with premium' do
+      article = journalist.articles.first
+      expect(article.title).to eq 'Test title'
+      expect(article.sub_title).to eq 'Test subtitle'
+      expect(article.content).to eq 'Test content!'
+      expect(article.premium).to be true
+    end
+  end
+
+  describe 'Registered user can not create an article' do
+    let(:registered_user) { create(:user, role: 'registered_user') }
+    let(:registered_user_headers) { registered_user.create_new_auth_token }
+    before do
+      post '/api/articles',
+           params: {
+             article: {
+               title: 'Test title',
+               sub_title: 'Test subtitle',
+               author_id: registered_user.id,
+               content: 'Test content!'
+             }
+           },
+           headers: registered_user_headers
+    end
+    it 'is expected to return 401 status' do
       expect(response).to have_http_status 401
     end
-    it "is expected to return an error message" do
-      expect(response_json["errors"]).to eq ["You need to sign in or sign up before continuing."]
+    it 'is expected to return an error message' do
+      expect(response_json).to have_key('message').and have_value(
+                                'You are not authorized to create an article.'
+                              )
+    end
+  end
+
+  describe 'Visitor can not create an article' do
+    before do
+      post '/api/articles',
+           params: {
+             article: {
+               title: 'Test title',
+               sub_title: 'Test subtitle',
+               author_id: 'Test author',
+               content: 'Test content!'
+             }
+           }
+    end
+    it 'is expected to return 401 status' do
+      expect(response).to have_http_status 401
+    end
+    it 'is expected to return an error message' do
+      expect(response_json['errors']).to eq [
+           'You need to sign in or sign up before continuing.'
+         ]
     end
   end
 end
